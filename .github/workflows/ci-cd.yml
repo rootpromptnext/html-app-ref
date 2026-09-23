@@ -13,7 +13,7 @@ env:
   APP_NAME: html-app
 
 jobs:
-  docker:
+  build:
     runs-on: ubuntu-latest
 
     steps:
@@ -28,14 +28,11 @@ jobs:
 
       - name: Build Docker image
         run: |
-          docker build \
-            -t ${{ secrets.DOCKERHUB_USERNAME }}/html-app:${GITHUB_RUN_NUMBER} \
-            -t ${{ secrets.DOCKERHUB_USERNAME }}/html-app:latest \
+          docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/html-app:latest 
             .
 
       - name: Push Docker image
         run: |
-          docker push ${{ secrets.DOCKERHUB_USERNAME }}/html-app:${GITHUB_RUN_NUMBER}
           docker push ${{ secrets.DOCKERHUB_USERNAME }}/html-app:latest
 
   deploy:
@@ -64,7 +61,7 @@ jobs:
 
       - name: Update deployment image
         run: |
-          sed -i "s|{{IMAGE}}|${{ secrets.DOCKERHUB_USERNAME }}/html-app:${GITHUB_RUN_NUMBER}|g" deployment.yaml
+          sed -i "s|{{IMAGE}}|${{ secrets.DOCKERHUB_USERNAME }}/html-app:latest|g" deployment.yaml
           sed -i "s|{{APP_NAME}}|${APP_NAME}|g" deployment.yaml
 
       - name: Deploy to EKS
