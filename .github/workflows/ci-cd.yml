@@ -28,8 +28,7 @@ jobs:
 
       - name: Build Docker image
         run: |
-          docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/html-app:latest 
-            .
+          docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/html-app:latest .
 
       - name: Push Docker image
         run: |
